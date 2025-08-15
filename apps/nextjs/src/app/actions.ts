@@ -3,16 +3,11 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
+import type { CreateSetupFormData } from "~/types/setup";
 import { CreateSetupSchema } from "~/schemas/setup";
 
-export async function createSetup(formData: FormData) {
-  const setupData = {
-    title: formData.get("title") ?? "",
-    author: formData.get("author") ?? "",
-    imageUrl: formData.get("imageUrl") ?? "",
-  };
-
-  const result = CreateSetupSchema.safeParse(setupData);
+export async function createSetup(data: CreateSetupFormData) {
+  const result = CreateSetupSchema.safeParse(data);
 
   if (!result.success) {
     console.error("Validation errors:", result.error);
@@ -21,6 +16,10 @@ export async function createSetup(formData: FormData) {
 
   // Simulate a delay to mimic server processing
   await new Promise((resolve) => setTimeout(resolve, 1000));
+
+  if (Math.random() < 0.25) {
+    throw new Error("Failed to create setup due to server error");
+  }
 
   console.log("Setup form data:", result.data);
 
