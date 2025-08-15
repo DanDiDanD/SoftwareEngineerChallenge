@@ -1,8 +1,10 @@
 import { Button, Input, Label } from "@acme/ui";
 
+import { createSetup } from "~/app/actions";
+
 export default function CreateSetupForm() {
   return (
-    <form className="space-y-4">
+    <form action={createSetup} className="space-y-4">
       <div className="space-y-2">
         <Label htmlFor="title">Setup Title</Label>
         <Input id="title" name="title" placeholder="Enter setup title" />
