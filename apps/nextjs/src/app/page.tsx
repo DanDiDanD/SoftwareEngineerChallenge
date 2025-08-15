@@ -5,7 +5,7 @@ import SetupGallery from "./_components/setup-gallery";
 import { SetupSkeleton } from "./_components/setup-gallery/SetupSkeleton";
 
 export default function HomePage() {
-  prefetch(trpc.post.all.queryOptions());
+  prefetch(trpc.setup.all.queryOptions());
 
   return (
     <HydrateClient>
