@@ -6,20 +6,12 @@ import { oAuthProxy } from "better-auth/plugins";
 
 import { db } from "@acme/db/client";
 
-export function initAuth(options: {
-  baseUrl: string;
-  productionUrl: string;
-  secret: string | undefined;
-
-  discordClientId: string;
-  discordClientSecret: string;
-}) {
+export function initAuth(options: { baseUrl: string; productionUrl: string }) {
   const config = {
     database: drizzleAdapter(db, {
       provider: "pg",
     }),
     baseURL: options.baseUrl,
-    secret: options.secret,
     plugins: [
       oAuthProxy({
         /**
@@ -30,13 +22,7 @@ export function initAuth(options: {
       }),
       expo(),
     ],
-    socialProviders: {
-      discord: {
-        clientId: options.discordClientId,
-        clientSecret: options.discordClientSecret,
-        redirectURI: `${options.productionUrl}/api/auth/callback/discord`,
-      },
-    },
+    socialProviders: {},
     trustedOrigins: ["expo://"],
   } satisfies BetterAuthOptions;
 
