@@ -7,3 +7,5 @@ export interface Setup {
   likes: number;
   tags: string[];
 }
+
+export type CreateSetupFormData = Pick<Setup, "title" | "author" | "imageUrl">;
