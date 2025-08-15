@@ -13,8 +13,13 @@ export function LikeButton({ initialLikes }: LikeButtonProps) {
   const [isLiked, setIsLiked] = useState(false);
 
   const handleLike = () => {
-    setLikes((prev) => prev + 1);
-    setIsLiked(!isLiked);
+    if (isLiked) {
+      setLikes((prev) => prev - 1);
+      setIsLiked(false);
+    } else {
+      setLikes((prev) => prev + 1);
+      setIsLiked(true);
+    }
   };
 
   return (
@@ -24,7 +29,7 @@ export function LikeButton({ initialLikes }: LikeButtonProps) {
       onClick={handleLike}
       className="flex items-center gap-2"
     >
-      ❤️
+      <span>{isLiked ? "❤️" : "🤍"}</span>
       <span>{likes}</span>
     </Button>
   );
