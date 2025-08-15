@@ -6,9 +6,10 @@ import { Button } from "@acme/ui";
 
 interface LikeButtonProps {
   initialLikes: number;
+  setupTitle: string;
 }
 
-export function LikeButton({ initialLikes }: LikeButtonProps) {
+export function LikeButton({ initialLikes, setupTitle }: LikeButtonProps) {
   const [likes, setLikes] = useState(initialLikes);
   const [isLiked, setIsLiked] = useState(false);
 
@@ -28,9 +29,11 @@ export function LikeButton({ initialLikes }: LikeButtonProps) {
       size="sm"
       onClick={handleLike}
       className="flex items-center gap-2"
+      aria-label={`${isLiked ? "Remove like from" : "Like"} "${setupTitle}" post`}
+      type="button"
     >
-      <span>{isLiked ? "❤️" : "🤍"}</span>
-      <span>{likes}</span>
+      <span aria-hidden="true">{isLiked ? "❤️" : "🤍"}</span>
+      <span aria-label={`${likes} likes`}>{likes}</span>
     </Button>
   );
 }

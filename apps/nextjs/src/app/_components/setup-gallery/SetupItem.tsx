@@ -18,12 +18,15 @@ interface SetupItemProps {
 
 export function SetupItem({ setup }: SetupItemProps) {
   return (
-    <article role="listitem">
+    <article
+      role="listitem"
+      aria-label={`Workspace setup: ${setup.title} by ${setup.author}`}
+    >
       <Card className="overflow-hidden">
         <div className="relative aspect-video">
           <Image
             src={setup.imageUrl}
-            alt={setup.title}
+            alt={`Workspace setup photo: ${setup.title}`}
             fill
             className="object-cover"
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
@@ -60,7 +63,7 @@ export function SetupItem({ setup }: SetupItemProps) {
           </div>
         </CardContent>
         <CardFooter className="flex items-center justify-between">
-          <LikeButton initialLikes={setup.likes} />
+          <LikeButton initialLikes={setup.likes} setupTitle={setup.title} />
         </CardFooter>
       </Card>
     </article>
