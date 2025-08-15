@@ -2,6 +2,7 @@ import { Suspense } from "react";
 
 import { HydrateClient, prefetch, trpc } from "~/trpc/server";
 import SetupGallery from "./_components/setup-gallery";
+import { SetupSkeleton } from "./_components/setup-gallery/SetupSkeleton";
 
 export default function HomePage() {
   prefetch(trpc.post.all.queryOptions());
@@ -17,7 +18,8 @@ export default function HomePage() {
             Setups <span className="text-primary">Gallery</span>
           </h1>
         </header>
-        <Suspense fallback={<div>Loading setups...</div>}>
+        <div className="mt-8 border-t border-gray-600" aria-hidden="true"></div>
+        <Suspense fallback={<SetupSkeleton />}>
           <SetupGallery />
         </Suspense>
       </main>
