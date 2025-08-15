@@ -1,10 +1,10 @@
-import { caller, HydrateClient, prefetch, trpc } from "~/trpc/server";
+import { Suspense } from "react";
 
-export default async function HomePage() {
+import { HydrateClient, prefetch, trpc } from "~/trpc/server";
+import SetupGallery from "./_components/setup-gallery";
+
+export default function HomePage() {
   prefetch(trpc.post.all.queryOptions());
-
-  const tRPCCaller = await caller();
-  const setups = await tRPCCaller.setup.all();
 
   return (
     <HydrateClient>
@@ -14,9 +14,9 @@ export default async function HomePage() {
             Setups <span className="text-primary">Gallery</span>
           </h1>
         </div>
-        <section className="mt-8">
-          <pre>{JSON.stringify(setups, null, 2)}</pre>
-        </section>
+        <Suspense fallback={<div>Loading setups...</div>}>
+          <SetupGallery />
+        </Suspense>
       </main>
     </HydrateClient>
   );
