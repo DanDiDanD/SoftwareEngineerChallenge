@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
-import type { CreateSetupFormData } from "~/types/setup";
+import type { CreateSetupFormData, LikeResult } from "~/types/setup";
 import { CreateSetupSchema } from "~/schemas/setup";
 
 export async function createSetup(data: CreateSetupFormData) {
@@ -25,4 +25,20 @@ export async function createSetup(data: CreateSetupFormData) {
 
   revalidatePath("/");
   redirect("/");
+}
+
+export async function likeSetup(data: LikeResult): Promise<LikeResult> {
+  await new Promise((resolve) => setTimeout(resolve, 300));
+
+  if (Math.random() < 0.25) {
+    throw new Error("Failed to update like status due to server error");
+  }
+
+  const newIsLiked = !data.isLiked;
+  const newLikes = newIsLiked ? data.likes + 1 : data.likes - 1;
+
+  return {
+    likes: newLikes,
+    isLiked: newIsLiked,
+  };
 }

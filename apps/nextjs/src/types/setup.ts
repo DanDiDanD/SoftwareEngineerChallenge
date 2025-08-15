@@ -9,3 +9,8 @@ export interface Setup {
 }
 
 export type CreateSetupFormData = Pick<Setup, "title" | "author" | "imageUrl">;
+
+export interface LikeResult {
+  likes: number;
+  isLiked: boolean;
+}

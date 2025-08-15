@@ -1,8 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useOptimistic, useState, useTransition } from "react";
 
 import { Button } from "@acme/ui";
+
+import type { LikeResult } from "~/types/setup";
+import { likeSetup } from "~/app/actions";
 
 interface LikeButtonProps {
   initialLikes: number;
@@ -10,30 +13,43 @@ interface LikeButtonProps {
 }
 
 export function LikeButton({ initialLikes, setupTitle }: LikeButtonProps) {
-  const [likes, setLikes] = useState(initialLikes);
-  const [isLiked, setIsLiked] = useState(false);
+  const [_, startTransition] = useTransition();
+  const [currentState, setCurrentState] = useState<LikeResult>({
+    likes: initialLikes || 0,
+    isLiked: false,
+  });
+
+  const [optimisticState, addOptimistic] = useOptimistic(
+    currentState,
+    (state, _) => ({
+      likes: state.isLiked ? state.likes - 1 : state.likes + 1,
+      isLiked: !state.isLiked,
+    }),
+  );
 
   const handleLike = () => {
-    if (isLiked) {
-      setLikes((prev) => prev - 1);
-      setIsLiked(false);
-    } else {
-      setLikes((prev) => prev + 1);
-      setIsLiked(true);
-    }
+    startTransition(async () => {
+      addOptimistic(null);
+
+      try {
+        const result = await likeSetup(currentState);
+        setCurrentState(result);
+      } catch (error) {
+        console.error("Failed to update like:", error);
+      }
+    });
   };
 
   return (
     <Button
-      variant={isLiked ? "destructive" : "secondary"}
+      variant={optimisticState.isLiked ? "destructive" : "secondary"}
       size="sm"
-      onClick={handleLike}
       className="flex items-center gap-2"
-      aria-label={`${isLiked ? "Remove like from" : "Like"} "${setupTitle}" post`}
-      type="button"
+      aria-label={`${optimisticState.isLiked ? "Remove like from" : "Like"} "${setupTitle}" post`}
+      onClick={handleLike}
     >
-      <span aria-hidden="true">{isLiked ? "❤️" : "🤍"}</span>
-      <span aria-label={`${likes} likes`}>{likes}</span>
+      <span>{optimisticState.isLiked ? "❤️" : "🤍"}</span>
+      <span>{optimisticState.likes}</span>
     </Button>
   );
 }
