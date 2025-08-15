@@ -4,11 +4,13 @@ import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from "@acme/ui";
 
 import type { Setup } from "~/types/setup";
+import { LikeButton } from "./LikeButton";
 
 interface SetupItemProps {
   setup: Setup;
@@ -57,6 +59,9 @@ export function SetupItem({ setup }: SetupItemProps) {
             ))}
           </div>
         </CardContent>
+        <CardFooter className="flex items-center justify-between">
+          <LikeButton initialLikes={setup.likes} />
+        </CardFooter>
       </Card>
     </article>
   );
